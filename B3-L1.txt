@@ -1,0 +1,55 @@
+Es 1
+
+SELECT * FROM clienti WHERE nome = 'Mario'
+
+Es 2
+
+SELECT nome, cognome FROM clienti WHERE anno_di_nascita = 1982;
+
+Es 3
+
+SELECT numero_fattura FROM fatture WHERE iva >= 20;
+
+Es 4
+
+SELECT * 
+FROM prodotti 
+WHERE EXTRACT(YEAR FROM data_attivazione) = 2017 
+AND (in_produzione = TRUE OR in_commercio = TRUE);
+
+Es 5
+
+SELECT f.numero_fattura, f.tipologia, f.importo, f.iva, f.data_fattura, c.numero_cliente, c.nome, c.cognome, c.regione_residenza
+FROM fatture f
+JOIN clienti c
+ON f.id_cliente = c.numero_cliente
+WHERE f.importo < 1000.00::money;
+
+Es 6
+
+SELECT f.numero_fattura, f.importo, f.iva, f.data_fattura, s.denominazione AS fornitore 
+FROM fatture f 
+JOIN fornitori s 
+ON f.numero_fornitore = s.numero_fornitore;
+
+Es 7
+
+SELECT EXTRACT(YEAR FROM data_fattura) AS Anno, count(*) FROM fatture WHERE iva = 20 GROUP BY anno ;
+
+Es 8
+
+SELECT EXTRACT (YEAR FROM data_fattura) AS anno, COUNT(*), SUM(importo) AS totale_importi FROM fatture GROUP BY anno;
+
+Es 9 Extra
+
+SELECT EXTRACT(YEAR FROM data_fattura) as anno, COUNT(*) as num_fatture FROM fatture WHERE tipologia = 'A' GROUP BY anno HAVING COUNT(*) > 2
+
+Es 10 Extra
+
+SELECT c.regione_residenza, SUM(f.importo) FROM fatture f JOIN clienti c ON f.id_cliente = c.numero_cliente GROUP BY c.regione_residenza
+
+Es 11 Extra
+
+SELECT COUNT (c.numero_cliente) FROM clienti c JOIN fatture f ON c.numero_cliente = f.id_cliente WHERE anno_di_nascita = 1980 AND f.importo > 50::money;
+
+
